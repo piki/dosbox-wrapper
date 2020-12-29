@@ -41,7 +41,7 @@ def main
 	cmd = %Q{/opt/retropie/supplementary/runcommand/runcommand.sh 0 "/opt/retropie/emulators/dosbox/bin/dosbox -conf #{TMP_CONFIG} #{exe} -exit" dosbox}
 
 	puts cmd
-	system cmd
+	system cmd unless @dry_run
 	File.unlink(TMP_CONFIG)
 	File.unlink(TMP_MAPPER)
 end
@@ -82,7 +82,7 @@ end
 
 def usage
 	$stderr.puts "Usage:"
-	$stderr.puts "  #{$0} [-c] config.json"
+	$stderr.puts "  #{$0} [-c] [-n] config.json"
 	exit
 end
 
@@ -91,6 +91,8 @@ def parse_args
 		case ARGV.shift
 			when "-c"
 				@parse_only = true
+			when "-n"
+				@dry_run = true
 			else
 				usage
 		end
