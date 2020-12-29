@@ -15,6 +15,7 @@ def main
 	# read the config, and fill in defaults for any missing parts
 	contents = File.read(@cfg)
 	contents = contents.lines.map{|line| line.gsub(/#.*/, '')}.join  # strip comments
+	check_for_keys_defined_twice(contents)
 
 	j = JSON.parse(contents)
 	j["config"] ||= {}
@@ -44,6 +45,23 @@ def main
 	system cmd unless @dry_run
 	File.unlink(TMP_CONFIG)
 	File.unlink(TMP_MAPPER)
+end
+
+def check_for_keys_defined_twice(str)
+	keys_defined = {}
+	str.lines.each_with_index do |line, idx|
+		if line =~ /^\s*"(\w+)":/
+			(keys_defined[$1] ||= []) << (idx+1)
+		end
+	end
+	ok = true
+	keys_defined.each do |k, lines|
+		if lines.size > 1
+			puts "Key #{k} is defined on multiple lines: #{lines.join(' ')}"
+			ok = false
+		end
+	end
+	exit 1 unless ok
 end
 
 def check_for_keys_that_send_two_events(keys)
