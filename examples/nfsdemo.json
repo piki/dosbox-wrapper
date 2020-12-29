@@ -1,0 +1,6 @@
+{
+	"mapping": {
+		"p1b1": "a"  # up shift
+	},
+	"executable": "nfsdemo/tnfs.exe"
+}

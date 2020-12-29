@@ -1,0 +1,13 @@
+{
+	"mapping": {
+		"p1b1": "lshift",   # left flipper
+		"p1up": "space",    # plunger, nudge
+		"p1down": "space",  # plunger, nudge
+		"p1left": "z",      # nudge left side
+		"p1right": "z",     # nudge left side
+		"p2left": "slash",  # nudge right side
+		"p2right": "slash", # nudge right side
+		"p2b1": "rshift"    # right flipper
+	},
+	"executable": "pinball/pinball.exe"
+}

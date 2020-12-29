@@ -1,0 +1,24 @@
+{
+	"config": {
+		"cycles": "10000",
+		"xms": "false",
+		"ems": "false"
+	},
+	"mapping": {
+		"p1b1": "x",      # fire main weapon
+		"p1b2": "z",      # drop bomb
+		"p1b3": "c",      # change bomb type
+		"p1b5": "lshift", # fire missile
+		"p1b6": "t",      # directions to target
+		"p1b7": "b",      # directions to landing pad
+
+		"p2b1": "m",      # map
+		"p2b2": "d",      # direction indicator on/off
+		"p2b3": "f2",     # bombsight on/off
+		"p2b4": "f3",     # stats on/off
+		"p2b5": "f4",     # radar on/off
+		"p2b7": "f9",     # slow down
+		"p2b8": "f10"     # speed up
+	},
+	"executable": "zone66/zone66.exe"
+}
