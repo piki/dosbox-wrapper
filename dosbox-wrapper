@@ -1,13 +1,13 @@
 #!/usr/bin/ruby
 
+require 'json'
+
 DEFAULT_CONFIG = "/opt/retropie/configs/pc/dosbox-SVN.conf"
 DEFAULT_MAPPER = "/opt/retropie/configs/pc/mapper-SVN.map"
-TMP_CONFIG = "/tmp/dosbox-temp.conf"
-TMP_MAPPER = "/tmp/mapper-temp.conf"
+TMP_CONFIG = "/dev/shm/dosbox-temp-#{$$}.conf"
+TMP_MAPPER = "/dev/shm/mapper-temp-#{$$}.conf"
 DOSBOX = "/opt/retropie/emulators/dosbox/bin/dosbox"
 MOUNT = "/home/pi/RetroPie/roms/pc"
-
-require 'json'
 
 def main
 	parse_args
