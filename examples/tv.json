@@ -1,0 +1,9 @@
+{
+	"mapping":{
+		"key_n": [13],
+		"key_y": [9],
+		"key_enter": [],
+		"key_tab": []
+	},
+	"executable": "tv/tv.exe"
+}

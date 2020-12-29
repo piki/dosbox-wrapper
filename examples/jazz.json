@@ -1,0 +1,30 @@
+{
+	"mapping": {
+		# button 1 = space (attack, drink, cling, walk)
+		"key_space": [306],
+
+		# button 2 = alt (jump)
+
+		# button 3 = ctrl (cycle weapons)
+		"key_lctrl": [32],
+
+		# button 4 = p (pause)
+		"key_p": [304],
+		"key_lshift": [],
+		
+		# button 5 = t (slow motion)
+		"key_t": [122],
+		"key_z": [],
+
+		# button 8 = esc (quit)
+		"key_esc": [118],
+		"key_v": [],
+
+		# bottom buttons 2+3 are L and S
+		"key_l": [13],
+		"key_s": [9],
+		"key_enter": [],
+		"key_tab": []
+	},
+	"executable": "jazz/jazz.exe"
+}

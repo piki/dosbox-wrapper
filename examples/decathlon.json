@@ -1,0 +1,60 @@
+{
+	"config": {
+		"cycles": "260",
+		"machine": "cga"
+	},
+	"mapping": {
+		# player 1 stick: W/A/S/Z (1500m run)
+		"key_w": [273],
+		"key_a": [276],
+		"key_s": [275],
+		"key_z": [274],
+		"key_left": [],
+		"key_right": [],
+		"key_up": [],
+		"key_down": [],
+
+		# Player 1 buttons, row 1
+		# 1+2 (run), E+L (shot put)
+		"key_1": [49, 113, 114, 306],
+		"key_2": [50, 119, 102, 308],
+		"key_e": [101, 32],
+		"key_l": [304],
+		"key_lctrl": [],
+		"key_lalt": [],
+		"key_lshift": [],
+
+		# Player 1 buttons, row 2
+		# t, x, space, enter
+		"key_t": [106, 116, 122],
+		"key_space": [99],
+		"key_enter": [13, 108, 118],
+		"key_c": [],
+
+		# player 2 stick: L/R = [/] (run)
+		# player 2 stick: U/D = 1+2 (p1 run in 100+400m dash)
+		"key_d": [],
+		"key_g": [],
+
+		# Player 2 buttons, row 1
+		# first two: [+] (p2 run for races, p1 run for hurdles, javelin, high jump, pole vault)
+		# first two also: 1+2
+		# last two: 1+2 (pole vault plant + extend)
+		"key_lbracket": [97, 100],
+		"key_rbracket": [103, 115],
+
+		# Player 2 buttons, row 2
+		# N/Y, T (javelin tilt), enter (pole vault release, javelin release)
+		"key_n": [105],
+		"key_y": [107],
+		"key_i": [],
+		"key_j": [],
+		"key_k": [],
+
+		# Hidden buttons
+		# P (exit), _, _, escape
+		"key_esc": [27],
+		"key_d": []
+	},
+	"executable": "decathln/decathln.exe"
+}

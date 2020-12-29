@@ -1,0 +1,9 @@
+{
+	"mapping": {
+		"key_b": [97, 120],
+		"key_s": [115, 99],
+		"key_x": [],
+		"key_c": []
+	},
+	"executable": "raptor/RAP.EXE"
+}

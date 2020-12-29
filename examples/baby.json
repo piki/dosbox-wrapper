@@ -1,0 +1,15 @@
+{
+	"config": {
+		"cycles": "260"
+	},
+	"mapping": {
+		"key_1": [306],
+		"key_2": [308],
+		"key_3": [32],
+		"key_space": [304],
+		"key_lctrl": [],
+		"key_lalt": [],
+		"key_lshift": []
+	},
+	"executable": "baby/BABY.EXE"
+}

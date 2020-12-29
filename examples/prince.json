@@ -1,0 +1,23 @@
+{
+	"mapping": {
+		# button 1 = shift (attack, drink, cling, walk)
+		"key_lshift": [306],
+		"key_lctrl": [],
+
+		# button 2 = space (jump)
+		"key_space": [308],
+		"key_lalt": [],
+
+		# button 4+8 = esc (pause)
+		"key_esc": [118, 304],
+		"key_v": [],
+
+		# bottom buttons 2+3 are ^L and ^G
+		"mod_1": [9, 13],
+		"key_l": [13],
+		"key_g": [9],
+		"key_enter": [],
+		"key_tab": []
+	},
+	"executable": "prince/prince.exe"
+}

@@ -1,0 +1,10 @@
+{
+	"config": {
+		"cycles": "150"
+	},
+	"mapping": {
+                "key_up": [306],
+                "key_lctrl": []
+	},
+	"executable": "parat/prp.com"
+}

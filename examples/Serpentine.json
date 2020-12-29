@@ -1,0 +1,22 @@
+{
+	"config": {
+		"cycles": "260"
+	},
+	"mapping": {
+		"key_a": [97, 273, 114],
+		"key_z": [112, 274, 102],
+		"key_k": [107, 276, 100],
+		"key_l": [108, 275, 103],
+		"key_esc": [118, 122],
+		"key_up": [],
+		"key_down": [],
+		"key_left": [],
+		"key_right": [],
+		"key_r": [],
+		"key_f": [],
+		"key_d": [],
+		"key_g": [],
+		"key_v": []
+	},
+	"executable": "Serpentine/START.EXE"
+}

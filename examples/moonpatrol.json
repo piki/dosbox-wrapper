@@ -1,0 +1,14 @@
+{
+	"config": {
+		"cycles": "260"
+	},
+	"mapping": {
+		"key_space": [306],
+		"key_lctrl": [],
+		"key_up": [308],
+		"key_lalt": [],
+		"key_f1": [118],
+		"key_v": []
+	},
+	"executable": "moonpatrol/PATROL.COM"
+}
