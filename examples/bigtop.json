@@ -4,43 +4,25 @@
 	},
 	"mapping": {
 		# dpad controls numeric keypad arrow keys
-		"key_kp_8": [273],
-		"key_kp_2": [274],
-		"key_kp_4": [276],
-		"key_kp_6": [275],
-		"key_up": [],
-		"key_down": [],
-		"key_left": [],
-		"key_right": [],
+		"p1up": "kp_8",
+		"p1down": "kp_2",
+		"p1left": "kp_4",
+		"p1right": "kp_6",
+		"p1b1": "enter",  # crouch
+		"p1b2": "space",  # jump
+		"p1b3": "kp_5",   # stop
+		"p1b4": "esc",    # pause
 
-		# row 1 buttons are: enter (crouch), space (jump), kp_5 (stop), esc (pause)
-		"key_enter": [306],
-		"key_space": [308],
-		"key_kp_5": [32],
-		"key_esc": [27, 304],
-		"key_lctrl": [],
-		"key_lalt": [],
-		"key_lshift": [],
-
-		# row 2 buttons + p2 row 2 buttons + p2 button 1 are 1-9 (difficulty)
-		"key_1": [122],
-		"key_2": [120],
-		"key_3": [99],
-		"key_4": [118],
-		"key_5": [105],
-		"key_6": [107],
-		"key_7": [106],
-		"key_8": [108],
-		"key_9": [97],
-		"key_z": [],
-		"key_x": [],
-		"key_c": [],
-		"key_v": [],
-		"key_i": [],
-		"key_k": [],
-		"key_j": [],
-		"key_l": [],
-		"key_a": []
+		# difficulty buttons: p1b5-8, p2b5-8, p1b1
+		"p1b5": "1",
+		"p1b6": "2",
+		"p1b7": "3",
+		"p1b8": "4",
+		"p2b5": "5",
+		"p2b6": "6",
+		"p2b7": "7",
+		"p2b8": "8",
+		"p2b1": "9"
 	},
 	"executable": "bigtop.bat"
 }

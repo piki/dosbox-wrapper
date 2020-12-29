@@ -1,9 +1,7 @@
 {
 	"mapping": {
-		"key_b": [97, 120],
-		"key_s": [115, 99],
-		"key_x": [],
-		"key_c": []
+		"p1b6": "b",  # buy
+		"p1b7": "s"   # sell
 	},
 	"executable": "raptor/RAP.EXE"
 }

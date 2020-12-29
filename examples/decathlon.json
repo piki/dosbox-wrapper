@@ -5,56 +5,38 @@
 	},
 	"mapping": {
 		# player 1 stick: W/A/S/Z (1500m run)
-		"key_w": [273],
-		"key_a": [276],
-		"key_s": [275],
-		"key_z": [274],
-		"key_left": [],
-		"key_right": [],
-		"key_up": [],
-		"key_down": [],
+		"p1up": "w",
+		"p1down": "z",
+		"p1left": "a",
+		"p1right": "s",
 
-		# Player 1 buttons, row 1
-		# 1+2 (run), E+L (shot put)
-		"key_1": [49, 113, 114, 306],
-		"key_2": [50, 119, 102, 308],
-		"key_e": [101, 32],
-		"key_l": [304],
-		"key_lctrl": [],
-		"key_lalt": [],
-		"key_lshift": [],
+		"p1b1": "1",            # run
+		"p1b2": "2",            # run
+		"p1b3": "e",            # shot put
+		"p1b4": "l",            # shot put
 
-		# Player 1 buttons, row 2
-		# t, x, space, enter
-		"key_t": [106, 116, 122],
-		"key_space": [99],
-		"key_enter": [13, 108, 118],
-		"key_c": [],
+		"p1b5": "t",
+		"p1b6": "x",
+		"p1b7": "space",
+		"p1b8": "enter",
 
-		# player 2 stick: L/R = [/] (run)
-		# player 2 stick: U/D = 1+2 (p1 run in 100+400m dash)
-		"key_d": [],
-		"key_g": [],
+		"p2up": "1",            # p1 run in 100+400m dash
+		"p2down": "2",          # (same)
+		"p2left": "lbracket",   # p2 run, p1 run in jumping events
+		"p2right": "rbracket",  # (same)
 
-		# Player 2 buttons, row 1
-		# first two: [+] (p2 run for races, p1 run for hurdles, javelin, high jump, pole vault)
-		# first two also: 1+2
-		# last two: 1+2 (pole vault plant + extend)
-		"key_lbracket": [97, 100],
-		"key_rbracket": [103, 115],
+		"p2b1": "lbracket",     # p2 run, p1 run in jumping events
+		"p2b2": "rbracket",     # (same)
+		"p2b3": "1",            # pole vault: plant
+		"p2b4": "2",            # pole vault: extend
 
-		# Player 2 buttons, row 2
-		# N/Y, T (javelin tilt), enter (pole vault release, javelin release)
-		"key_n": [105],
-		"key_y": [107],
-		"key_i": [],
-		"key_j": [],
-		"key_k": [],
+		"p2b5": "n",            # no
+		"p2b6": "y",            # yes
+		"p2b7": "t",            # javelin tilt
+		"p2b8": "enter"         # pole vault release, javelin release
 
-		# Hidden buttons
-		# P (exit), _, _, escape
-		"key_esc": [27],
-		"key_d": []
+		# Hidden buttons per defaults:
+		# P (exit), _, _, esc
 	},
 	"executable": "decathln/decathln.exe"
 }

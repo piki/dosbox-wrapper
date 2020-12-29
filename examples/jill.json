@@ -1,27 +1,11 @@
 {
 	"mapping": {
-		# button 1 = alt (attack)
-		"key_lalt": [306],
-		"key_lctrl": [],
-
-		# button 2 = shift (jump)
-		"key_lshift": [308],
+		"p1b1": "lalt",    # attack
+		"p1b2": "lshift",  # jump
+		"p1b5": "t",       # slow motion
 		
-		# button 4 = enter
-		"key_enter": [304],
-
-		# button 5 = t (slow motion)
-		"key_t": [122],
-		"key_z": [],
-
-		# button 8 = esc (quit)
-		"key_esc": [118],
-		"key_v": [],
-
-		# bottom buttons 2+3 are R and S
-		"key_r": [13],
-		"key_s": [9],
-		"key_tab": []
+		"p3b2": "r",       # restore
+		"p3b3": "s"        # save
 	},
 	"executable": "jill/jill1.exe"
 }

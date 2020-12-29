@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 
 require 'json'
+require 'set'
 
 DEFAULT_CONFIG = "/opt/retropie/configs/pc/dosbox-SVN.conf"
 DEFAULT_MAPPER = "/opt/retropie/configs/pc/mapper-SVN.map"
@@ -8,6 +9,43 @@ TMP_CONFIG = "/dev/shm/dosbox-temp-#{$$}.conf"
 TMP_MAPPER = "/dev/shm/mapper-temp-#{$$}.conf"
 DOSBOX = "/opt/retropie/emulators/dosbox/bin/dosbox"
 MOUNT = "/home/pi/RetroPie/roms/pc"
+SDL_KEYSYM_FILE = "/usr/include/SDL/SDL_keysym.h"
+
+# Map logical names to the physical keys they generate on an I-PAC2.
+BUTTON_ALIASES = {
+	"p1up" => "up",
+	"p1down" => "down",
+	"p1left" => "left",
+	"p1right" => "right",
+	"p1b1" => "lctrl",
+	"p1b2" => "lalt",
+	"p1b3" => "space",
+	"p1b4" => "lshift",
+	"p1b5" => "z",
+	"p1b6" => "x",
+	"p1b7" => "c",
+	"p1b8" => "v",
+	"p2up" => "r",
+	"p2down" => "f",
+	"p2left" => "d",
+	"p2right" => "g",
+	"p2b1" => "a",
+	"p2b2" => "s",
+	"p2b3" => "q",
+	"p2b4" => "w",
+	"p2b5" => "i",
+	"p2b6" => "k",
+	"p2b7" => "j",
+	"p2b8" => "l",
+	# There is no player 3 on the IPAC-2.
+	# "p3b1" through "p3b4" are my own name for the four hidden buttons (generally
+	# used for quit, restore, save, and fast forward) on the underside of the
+	# controller area.
+	"p3b1" => "p",
+	"p3b2" => "return",
+	"p3b3" => "tab",
+	"p3b4" => "escape"
+}
 
 def main
 	parse_args
@@ -23,18 +61,17 @@ def main
 	fail unless j["executable"]
 
 	j["config"]["mapperfile"] ||= TMP_MAPPER;
-	check_for_keys_that_send_two_events(j["mapping"])
 	if @parse_only
 		puts "Syntax OK"
 		exit
 	end
 	p j
 
-	rewrite(DEFAULT_CONFIG, TMP_CONFIG, j["config"], /^(\w+)\s*=\s*(.*)/) do |key, newval|
+	rewrite_config(j["config"]) do |key, newval|
 		"#{key} = #{newval}"
 	end
 
-	rewrite(DEFAULT_MAPPER, TMP_MAPPER, j["mapping"], /^(\w+)\s+(.*)/) do |key, newval|
+	rewrite_keys(j["mapping"]) do |key, newval|
 		key + " " + newval.map {|n| %Q{"key #{n}" }}.join
 	end
 
@@ -43,8 +80,9 @@ def main
 
 	puts cmd
 	system cmd unless @dry_run
-	File.unlink(TMP_CONFIG)
-	File.unlink(TMP_MAPPER)
+ensure
+	File.unlink(TMP_CONFIG) if File.exist?(TMP_CONFIG)
+	File.unlink(TMP_MAPPER) if File.exist?(TMP_MAPPER)
 end
 
 def check_for_keys_defined_twice(str)
@@ -64,28 +102,11 @@ def check_for_keys_defined_twice(str)
 	exit 1 unless ok
 end
 
-def check_for_keys_that_send_two_events(keys)
-	in_use = {}
-	keys.each do |k, arr|
-		arr.each do |v|
-			(in_use[v] ||= []) << k unless k =~ /^mod_/
-		end
-	end
-	ok = true
-	in_use.each do |v, karr|
-		if karr.size > 1
-			puts "Key #{v} is used for #{karr.join(' ')}"
-			ok = false
-		end
-	end
-	exit 1 unless ok
-end
-
-def rewrite(infn, outfn, hash, re)
-	File.open(infn) do |fp|
-		File.open(outfn, "w") do |op|
+def rewrite_config(hash)
+	File.open(DEFAULT_CONFIG) do |fp|
+		File.open(TMP_CONFIG, "w") do |op|
 			fp.each_line do |line|
-				if line =~ re
+				if line =~ /^(\w+)\s*=\s*(.*)/
 					if hash.has_key?($1)
 						puts "-#{line}"
 						line = yield $1, hash[$1]
@@ -95,6 +116,102 @@ def rewrite(infn, outfn, hash, re)
 				op.puts line
 			end
 		end
+	end
+end
+
+# Rewrite the key-mapping file.
+#
+# Our config file contains lines like:
+#   "p1b1": "lshift",        # attack, drink, cling, walk
+#
+# The names on the left are either key names from SDL_keysym.h or aliases from
+# BUTTON_ALIASES, above.
+#
+# The names on the right are key names from the dosbox mapper file.  Omit the
+# "key_" prefix.  Values can either be a single, scalar key name or an array of
+# them.
+#
+# Note that SDL and dosbox use slightly different names, e.g. "return" vs
+# "enter" and "escape" vs "esc".
+#
+# Each line in the config signifies two things:
+#  1. The key on the left gets added to the list of causes for each key on the
+#     right.  e.g., "key_lshift" is now caused by 306, which is the scancode
+#     for "lctrl" aka "p1b1".
+#  2. The key on the left no longer causes its usual thing.  e.g., "key_lctrl"
+#     no longer gets caused by 306.
+def rewrite_keys(hash)
+	sdl_symbols = {}
+	File.open(SDL_KEYSYM_FILE) do |fp|
+		fp.each_line do |line|
+			if line =~ /SDLK_(\S+)\s+=\s+(\d+)/
+				sdl_symbols[$1.downcase] = $2.to_i
+			end
+		end
+	end
+	$stderr.puts "Read #{sdl_symbols.size} keys from #{SDL_KEYSYM_FILE}"
+
+	# check that all BUTTON_ALIASES targets are valid SDL symbols
+	BUTTON_ALIASES.each do |_, target|
+		fail "BUTTON_ALIASES target #{target.inspect} is not a valid SDL symbol" unless sdl_symbols.has_key?(target)
+	end
+
+	# Hash from effects (dosbox symbols) to causes (SDL scan codes).
+	# e.g., causes_of["lshift"] => [ 306 ] means that pressing 306 (p1b1 aka lctrl) is treated as lshift
+	causes_of = {}
+	# Hash from causes (SDL scan codes) to effects (dosbox symbols).
+	# e.g., foo[306] => ["lshift"] means that one of the valid things 306 does is send an lshift.
+	# All other uses of 306 will be removed when rewriting the mapping file.
+	effects_of = {}
+	# confirm that all effects are real dosbox keys
+	all_effects = Set.new
+	hash.each do |cause, effects|
+		cause = BUTTON_ALIASES[cause] if BUTTON_ALIASES.has_key?(cause)
+		effects = [effects] unless effects.is_a?(Array)
+		puts "#{cause.inspect} => #{effects.inspect}"
+		effects.each do |eff|
+			cause_code = sdl_symbols[cause.downcase]
+			fail "#{cause} is not a valid SDL symbol" unless cause_code
+			(causes_of[eff] ||= []) << cause_code
+			(effects_of[cause_code] ||= []) << eff
+			all_effects << eff
+		end
+	end
+
+	# Now, finally, rewrite the mapper file.
+	# For each line, add any new causes (from causes_of).  Remove any
+	# causes that have an entry in effects_of that doesn't include this
+	# particular effect.
+	File.open(DEFAULT_MAPPER) do |fp|
+		File.open(TMP_MAPPER, "w") do |op|
+			fp.each_line do |line|
+				if line =~ /^((?:key|mod)_\w+)\s+(.*)/
+					effect, causes = $1, $2
+					short_effect = effect.gsub(/^key_/, '')
+					all_effects.delete(short_effect)
+					causes = causes.split(/"\s+"/).map{|tok| tok =~ /key (\d+)/ && $1.to_i}
+					oc = causes.clone
+					causes.delete_if {|c| effects_of.has_key?(c) && !effects_of[c].include?(short_effect)}
+					if causes_of.has_key?(short_effect)
+						causes += causes_of[short_effect]
+					end
+					if oc != causes
+						causes.sort!
+						puts "-#{line}"
+						line = yield effect, causes
+						puts "+#{line}"
+					end
+				end
+				op.puts line
+			end
+		end
+	end
+
+	unless all_effects.empty?
+		all_effects.each do |eff|
+			$stderr.puts "ERROR: #{eff.inspect} is not a valid dosbox symbol"
+		end
+		exit 1
 	end
 end
 

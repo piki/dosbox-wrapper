@@ -3,8 +3,7 @@
 		"cycles": "150"
 	},
 	"mapping": {
-                "key_up": [306],
-                "key_lctrl": []
+		"p1b1": "up"   # shoot
 	},
 	"executable": "parat/prp.com"
 }

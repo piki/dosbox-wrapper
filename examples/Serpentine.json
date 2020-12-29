@@ -3,20 +3,17 @@
 		"cycles": "260"
 	},
 	"mapping": {
-		"key_a": [97, 273, 114],
-		"key_z": [112, 274, 102],
-		"key_k": [107, 276, 100],
-		"key_l": [108, 275, 103],
-		"key_esc": [118, 122],
-		"key_up": [],
-		"key_down": [],
-		"key_left": [],
-		"key_right": [],
-		"key_r": [],
-		"key_f": [],
-		"key_d": [],
-		"key_g": [],
-		"key_v": []
+		"p1up": "a",    # up
+		"p1down": "z",  # down
+		"p1left": "k",  # left
+		"p1right": "l", # right
+		"p1b8": "esc",  # pause
+
+		# mirror directional controls on the p2 stick for two-handed play
+		"p2up": "a",    # up
+		"p2down": "z",  # down
+		"p2left": "k",  # left
+		"p2right": "l"  # right
 	},
 	"executable": "Serpentine/START.EXE"
 }

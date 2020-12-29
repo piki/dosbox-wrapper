@@ -1,9 +1,7 @@
 {
 	"mapping":{
-		"key_n": [13],
-		"key_y": [9],
-		"key_enter": [],
-		"key_tab": []
+		"p2b1": "n",  # No
+		"p2b2": "y"   # Yes
 	},
 	"executable": "tv/tv.exe"
 }

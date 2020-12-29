@@ -1,41 +1,18 @@
 {
 	"mapping": {
-		# button 1 = alt (shoot)
-		"key_lalt": [306],
+		"p1b1": "lalt",   # shoot
+		"p1b2": "lctrl",  # jump
+		"p1b3": "up",     # action
+		"p1b5": "f1",     # help, needed for saving
+		"p1b8": "esc",    # pause
 
-		# button 2 = ctrl (jump)
-		"key_lctrl": [308],
+		"p2b1": "1",      # save slots 1-4
+		"p2b2": "2",
+		"p2b3": "3",
+		"p2b4": "4",
 
-		# button 3 = up (action)
-		"key_up": [32, 273],
-		"key_space": [],
-
-		# button 4 = enter
-		"key_enter": [304],
-		"key_lshift": [],
-
-		# button 5 = f1 (help, needed for saving)
-		"key_f1": [122],
-		"key_z": [],
-
-		# button 8 = esc (pause)
-		"key_esc": [118],
-
-		# p2 buttons 1-4 = 1-4 (save slots)
-		"key_1": [97],
-		"key_2": [115],
-		"key_3": [113],
-		"key_4": [119],
-		"key_a": [],
-		"key_q": [],
-		"key_w": [],
-
-		# bottom button 2 = r (restore)
-		"key_r": [13],
-
-		# bottom button 3 = s (save)
-		"key_s": [9],
-		"key_tab": []
+		"p3b2": "r",      # restore
+		"p3b3": "s"       # save
 	},
 	"executable": "duke1/dn1.exe"
 }

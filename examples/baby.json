@@ -3,13 +3,10 @@
 		"cycles": "260"
 	},
 	"mapping": {
-		"key_1": [306],
-		"key_2": [308],
-		"key_3": [32],
-		"key_space": [304],
-		"key_lctrl": [],
-		"key_lalt": [],
-		"key_lshift": []
+		"p1b1": "1",
+		"p1b2": "2",
+		"p1b3": "3",
+		"p1b4": "space"  # start game
 	},
 	"executable": "baby/BABY.EXE"
 }
