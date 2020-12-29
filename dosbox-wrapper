@@ -1,0 +1,106 @@
+#!/usr/bin/ruby
+
+DEFAULT_CONFIG = "/opt/retropie/configs/pc/dosbox-SVN.conf"
+DEFAULT_MAPPER = "/opt/retropie/configs/pc/mapper-SVN.map"
+TMP_CONFIG = "/tmp/dosbox-temp.conf"
+TMP_MAPPER = "/tmp/mapper-temp.conf"
+DOSBOX = "/opt/retropie/emulators/dosbox/bin/dosbox"
+MOUNT = "/home/pi/RetroPie/roms/pc"
+
+require 'json'
+
+def main
+	parse_args
+
+	# read the config, and fill in defaults for any missing parts
+	contents = File.read(@cfg)
+	contents = contents.lines.map{|line| line.gsub(/#.*/, '')}.join  # strip comments
+
+	j = JSON.parse(contents)
+	j["config"] ||= {}
+	j["mapping"] ||= {}
+	fail unless j["executable"]
+
+	j["config"]["mapperfile"] ||= TMP_MAPPER;
+	check_for_keys_that_send_two_events(j["mapping"])
+	if @parse_only
+		puts "Syntax OK"
+		exit
+	end
+	p j
+
+	rewrite(DEFAULT_CONFIG, TMP_CONFIG, j["config"], /^(\w+)\s*=\s*(.*)/) do |key, newval|
+		"#{key} = #{newval}"
+	end
+
+	rewrite(DEFAULT_MAPPER, TMP_MAPPER, j["mapping"], /^(\w+)\s+(.*)/) do |key, newval|
+		key + " " + newval.map {|n| %Q{"key #{n}" }}.join
+	end
+
+	exe = "#{MOUNT}/#{j["executable"]}"
+	cmd = %Q{/opt/retropie/supplementary/runcommand/runcommand.sh 0 "/opt/retropie/emulators/dosbox/bin/dosbox -conf #{TMP_CONFIG} #{exe} -exit" dosbox}
+
+	puts cmd
+	system cmd
+	File.unlink(TMP_CONFIG)
+	File.unlink(TMP_MAPPER)
+end
+
+def check_for_keys_that_send_two_events(keys)
+	in_use = {}
+	keys.each do |k, arr|
+		arr.each do |v|
+			(in_use[v] ||= []) << k unless k =~ /^mod_/
+		end
+	end
+	ok = true
+	in_use.each do |v, karr|
+		if karr.size > 1
+			puts "Key #{v} is used for #{karr.join(' ')}"
+			ok = false
+		end
+	end
+	exit 1 unless ok
+end
+
+def rewrite(infn, outfn, hash, re)
+	File.open(infn) do |fp|
+		File.open(outfn, "w") do |op|
+			fp.each_line do |line|
+				if line =~ re
+					if hash.has_key?($1)
+						puts "-#{line}"
+						line = yield $1, hash[$1]
+						puts "+#{line}"
+					end
+				end
+				op.puts line
+			end
+		end
+	end
+end
+
+def usage
+	$stderr.puts "Usage:"
+	$stderr.puts "  #{$0} [-c] config.json"
+	exit
+end
+
+def parse_args
+	while ARGV.first =~ /^-/ do
+		case ARGV.shift
+			when "-c"
+				@parse_only = true
+			else
+				usage
+		end
+	end
+
+	@cfg = ARGV.first
+	unless File.exist?(@cfg)
+		$stderr.puts "File #{@cfg} not found."
+		exit 1
+	end
+end
+
+main
