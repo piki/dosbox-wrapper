@@ -1,0 +1,14 @@
+{
+	"mapping": {
+		"p1b1": "a",  # accelerate
+		"p2up": "a"   # accelerate
+	},
+	"autoexec": [
+		"mount c /home/pi/RetroPie/roms/pc",
+		"imgmount e c:\\nfsse.iso -t iso",
+		"c:",
+		"cd nfsse",
+		"nfs",
+		"exit"
+	]
+}

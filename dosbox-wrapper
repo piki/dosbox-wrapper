@@ -58,7 +58,8 @@ def main
 	j = JSON.parse(contents)
 	j["config"] ||= {}
 	j["mapping"] ||= {}
-	fail unless j["executable"]
+	fail unless j["executable"] || j["autoexec"]
+	fail if j["executable"] && j["autoexec"]
 
 	j["config"]["mapperfile"] ||= TMP_MAPPER;
 	if @parse_only
@@ -67,7 +68,7 @@ def main
 	end
 	p j
 
-	rewrite_config(j["config"]) do |key, newval|
+	rewrite_config(j["config"], j["autoexec"]) do |key, newval|
 		"#{key} = #{newval}"
 	end
 
@@ -75,8 +76,12 @@ def main
 		key + " " + newval.map {|n| %Q{"key #{n}" }}.join
 	end
 
-	exe = "#{MOUNT}/#{j["executable"]}"
-	cmd = %Q{/opt/retropie/supplementary/runcommand/runcommand.sh 0 "/opt/retropie/emulators/dosbox/bin/dosbox -conf #{TMP_CONFIG} #{exe} -exit" dosbox}
+	if j["executable"]
+		exe = "#{MOUNT}/#{j["executable"]}"
+		cmd = %Q{/opt/retropie/supplementary/runcommand/runcommand.sh 0 "/opt/retropie/emulators/dosbox/bin/dosbox -conf #{TMP_CONFIG} #{exe} -exit" dosbox}
+	else
+		cmd = %Q{/opt/retropie/supplementary/runcommand/runcommand.sh 0 "/opt/retropie/emulators/dosbox/bin/dosbox -conf #{TMP_CONFIG} -exit" dosbox}
+	end
 
 	puts cmd
 	system cmd unless @dry_run
@@ -102,11 +107,16 @@ def check_for_keys_defined_twice(str)
 	exit 1 unless ok
 end
 
-def rewrite_config(hash)
+def rewrite_config(hash, autoexec)
 	File.open(DEFAULT_CONFIG) do |fp|
 		File.open(TMP_CONFIG, "w") do |op|
 			fp.each_line do |line|
-				if line =~ /^(\w+)\s*=\s*(.*)/
+				if autoexec && line.strip.downcase == '[autoexec]'
+					op.puts line
+					op.puts autoexec
+					puts line
+					puts autoexec.map {|s| "+#{s}"}
+				elsif line =~ /^(\w+)\s*=\s*(.*)/
 					if hash.has_key?($1)
 						puts "-#{line}"
 						line = yield $1, hash[$1]
